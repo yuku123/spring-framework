@@ -46,7 +46,7 @@ public interface ResourceLoader {
 
 
 	/**
-	 * Return a Resource handle for the specified resource location.
+	 * Return a Resource handle for the specified resource locatioan.
 	 * <p>The handle should always be a reusable resource descriptor,
 	 * allowing for multiple {@link Resource#getInputStream()} calls.
 	 * <p><ul>

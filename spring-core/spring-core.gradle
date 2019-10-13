@@ -85,7 +85,8 @@ dependencies {
 	testCompile("org.xmlunit:xmlunit-matchers")
 	testCompile("javax.xml.bind:jaxb-api")
 	testCompile("com.fasterxml.woodstox:woodstox-core")
-	testCompile(project(":kotlin-coroutines"))
+	//这个地方修改一下，让它进行编译
+	compile(project(":kotlin-coroutines"))
 }
 
 jar {

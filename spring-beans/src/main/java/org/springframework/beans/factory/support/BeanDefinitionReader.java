@@ -39,7 +39,7 @@ import org.springframework.lang.Nullable;
  */
 public interface BeanDefinitionReader {
 
-	/**
+	/**z
 	 * Return the bean factory to register the bean definitions with.
 	 * <p>The factory is exposed through the BeanDefinitionRegistry interface,
 	 * encapsulating the methods that are relevant for bean definition handling.

@@ -65,6 +65,7 @@ public class FileSystemResourceLoader extends DefaultResourceLoader {
 			super(path);
 		}
 
+		//实现 ContextResource 接口，并实现对应的 #getPathWithinContext() 接口方法
 		@Override
 		public String getPathWithinContext() {
 			return getPath();
