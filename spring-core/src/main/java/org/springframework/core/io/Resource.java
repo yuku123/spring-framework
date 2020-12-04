@@ -49,6 +49,8 @@ import org.springframework.lang.Nullable;
  * @see ByteArrayResource
  * @see InputStreamResource
  */
+
+// @zifang Spring 框架所有资源的抽象和访问接口
 public interface Resource extends InputStreamSource {
 
 	/**

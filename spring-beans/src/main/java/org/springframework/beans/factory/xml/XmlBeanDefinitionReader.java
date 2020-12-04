@@ -306,7 +306,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 */
 	@Override
 	public int loadBeanDefinitions(Resource resource) throws BeanDefinitionStoreException {
-		//都要套一个编码
+		// @zifang 都要套一个编码
 		return loadBeanDefinitions(new EncodedResource(resource));
 	}
 
@@ -328,7 +328,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			currentResources = new HashSet<>(4);
 			this.resourcesCurrentlyBeingLoaded.set(currentResources);
 		}
-		if (!currentResources.add(encodedResource)) {// 将当前资源加入记录中。如果已存在，抛出异常
+		// 将当前资源加入记录中。如果已存在，抛出异常
+		if (!currentResources.add(encodedResource)) {
 			throw new BeanDefinitionStoreException(
 					"Detected cyclic loading of " + encodedResource + " - check your import definitions!");
 		}
