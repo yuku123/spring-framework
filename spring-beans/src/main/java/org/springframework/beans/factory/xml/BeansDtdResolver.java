@@ -41,6 +41,8 @@ import org.springframework.lang.Nullable;
  * @author Colin Sampaleanu
  * @since 04.06.2003
  * @see ResourceEntityResolver
+ *
+ * DTD加载类型 直接截取systemId最后的xx.dtd
  */
 public class BeansDtdResolver implements EntityResolver {
 

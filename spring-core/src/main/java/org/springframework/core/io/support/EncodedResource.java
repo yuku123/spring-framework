@@ -134,6 +134,8 @@ public class EncodedResource implements InputStreamSource {
 	 * @throws IOException if opening the Reader failed
 	 * @see #requiresReader()
 	 * @see #getInputStream()
+	 *
+	 * 当设置了编码属性的场合，spring会使用相应的编码作为输入流的编码
 	 */
 	public Reader getReader() throws IOException {
 		if (this.charset != null) {

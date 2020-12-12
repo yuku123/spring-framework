@@ -54,6 +54,8 @@ import org.springframework.util.CollectionUtils;
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @since 2.0
+ *
+ * XSD的类型 默认到META-INF/Spring.schemas文件中找到systemid所对应的xsd文件并加载
  */
 public class PluggableSchemaResolver implements EntityResolver {
 
