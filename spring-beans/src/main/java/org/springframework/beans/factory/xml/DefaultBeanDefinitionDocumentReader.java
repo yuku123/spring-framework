@@ -213,68 +213,68 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * from the given resource into the bean factory.
 	 */
 	protected void importBeanDefinitionResource(Element ele) {
-		String location = ele.getAttribute(RESOURCE_ATTRIBUTE);
-		if (!StringUtils.hasText(location)) {
-			getReaderContext().error("Resource location must not be empty", ele);
-			return;
-		}
+			String location = ele.getAttribute(RESOURCE_ATTRIBUTE);
+			if (!StringUtils.hasText(location)) {
+				getReaderContext().error("Resource location must not be empty", ele);
+				return;
+			}
 
-		// Resolve system properties: e.g. "${user.dir}"
-		location = getReaderContext().getEnvironment().resolveRequiredPlaceholders(location);
+			// Resolve system properties: e.g. "${user.dir}"
+			location = getReaderContext().getEnvironment().resolveRequiredPlaceholders(location);
 
-		Set<Resource> actualResources = new LinkedHashSet<>(4);
+			Set<Resource> actualResources = new LinkedHashSet<>(4);
 
-		// Discover whether the location is an absolute or relative URI
-		boolean absoluteLocation = false;
-		try {
-			absoluteLocation = ResourcePatternUtils.isUrl(location) || ResourceUtils.toURI(location).isAbsolute();
-		}
-		catch (URISyntaxException ex) {
-			// cannot convert to an URI, considering the location relative
-			// unless it is the well-known Spring prefix "classpath*:"
-		}
-
-		// Absolute or relative?
-		if (absoluteLocation) {
+			// Discover whether the location is an absolute or relative URI
+			boolean absoluteLocation = false;
 			try {
-				int importCount = getReaderContext().getReader().loadBeanDefinitions(location, actualResources);
-				if (logger.isTraceEnabled()) {
-					logger.trace("Imported " + importCount + " bean definitions from URL location [" + location + "]");
+				absoluteLocation = ResourcePatternUtils.isUrl(location) || ResourceUtils.toURI(location).isAbsolute();
+			}
+			catch (URISyntaxException ex) {
+				// cannot convert to an URI, considering the location relative
+				// unless it is the well-known Spring prefix "classpath*:"
+			}
+
+			// Absolute or relative?
+			if (absoluteLocation) {
+				try {
+					int importCount = getReaderContext().getReader().loadBeanDefinitions(location, actualResources);
+					if (logger.isTraceEnabled()) {
+						logger.trace("Imported " + importCount + " bean definitions from URL location [" + location + "]");
+					}
+				}
+				catch (BeanDefinitionStoreException ex) {
+					getReaderContext().error(
+							"Failed to import bean definitions from URL location [" + location + "]", ele, ex);
 				}
 			}
-			catch (BeanDefinitionStoreException ex) {
-				getReaderContext().error(
-						"Failed to import bean definitions from URL location [" + location + "]", ele, ex);
-			}
-		}
-		else {
-			// No URL -> considering resource location as relative to the current file.
-			try {
-				int importCount;
-				Resource relativeResource = getReaderContext().getResource().createRelative(location);
-				if (relativeResource.exists()) {
-					importCount = getReaderContext().getReader().loadBeanDefinitions(relativeResource);
-					actualResources.add(relativeResource);
+			else {
+				// No URL -> considering resource location as relative to the current file.
+				try {
+					int importCount;
+					Resource relativeResource = getReaderContext().getResource().createRelative(location);
+					if (relativeResource.exists()) {
+						importCount = getReaderContext().getReader().loadBeanDefinitions(relativeResource);
+						actualResources.add(relativeResource);
+					}
+					else {
+						String baseLocation = getReaderContext().getResource().getURL().toString();
+						importCount = getReaderContext().getReader().loadBeanDefinitions(
+								StringUtils.applyRelativePath(baseLocation, location), actualResources);
+					}
+					if (logger.isTraceEnabled()) {
+						logger.trace("Imported " + importCount + " bean definitions from relative location [" + location + "]");
+					}
 				}
-				else {
-					String baseLocation = getReaderContext().getResource().getURL().toString();
-					importCount = getReaderContext().getReader().loadBeanDefinitions(
-							StringUtils.applyRelativePath(baseLocation, location), actualResources);
+				catch (IOException ex) {
+					getReaderContext().error("Failed to resolve current resource location", ele, ex);
 				}
-				if (logger.isTraceEnabled()) {
-					logger.trace("Imported " + importCount + " bean definitions from relative location [" + location + "]");
+				catch (BeanDefinitionStoreException ex) {
+					getReaderContext().error(
+							"Failed to import bean definitions from relative location [" + location + "]", ele, ex);
 				}
 			}
-			catch (IOException ex) {
-				getReaderContext().error("Failed to resolve current resource location", ele, ex);
-			}
-			catch (BeanDefinitionStoreException ex) {
-				getReaderContext().error(
-						"Failed to import bean definitions from relative location [" + location + "]", ele, ex);
-			}
-		}
-		Resource[] actResArray = actualResources.toArray(new Resource[0]);
-		getReaderContext().fireImportProcessed(location, actResArray, extractSource(ele));
+			Resource[] actResArray = actualResources.toArray(new Resource[0]);
+			getReaderContext().fireImportProcessed(location, actResArray, extractSource(ele));
 	}
 
 	/**
@@ -316,7 +316,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// 先委托delegate.parseBeanDefinitionElement 进行解析，BeanDefinitionHolder会包含各种属性
 		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
 		if (bdHolder != null) {
-			// 进行自定义标签处理
+			// 进行自定义标签处理 子元素用的自定义标签
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
 				// 进行 BeanDefinition 的注册

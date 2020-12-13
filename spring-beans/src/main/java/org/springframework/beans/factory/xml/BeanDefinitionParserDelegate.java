@@ -522,11 +522,11 @@ public class BeanDefinitionParserDelegate {
 			parseBeanDefinitionAttributes(ele, beanName, containingBean, bd);
 			bd.setDescription(DomUtils.getChildElementValueByTagName(ele, DESCRIPTION_ELEMENT));
 
-			// 解析元数据
+			// 解析元数据 需要使用的时候 beanDefinition.getArribute(key)
 			parseMetaElements(ele, bd);
-			// 解析lookup-method属性
+			// 解析lookup-method属性 用来覆盖bean方法的
 			parseLookupOverrideSubElements(ele, bd.getMethodOverrides());
-			// 解析replace-method属性
+			// 解析replace-method属性 用来替换方法
 			parseReplacedMethodSubElements(ele, bd.getMethodOverrides());
 
 			// 解析构造函数参数
@@ -1416,7 +1416,7 @@ public class BeanDefinitionParserDelegate {
 	 * Decorate the given bean definition through a namespace handler, if applicable.
 	 * @param ele the current element
 	 * @param originalDef the current bean definition
-	 * @param containingBd the containing bean definition (if any)
+	 * @param containingBd the containing bean definition (if any) 代表父类bean
 	 * @return the decorated bean definition
 	 */
 	public BeanDefinitionHolder decorateBeanDefinitionIfRequired(
@@ -1428,6 +1428,7 @@ public class BeanDefinitionParserDelegate {
 		NamedNodeMap attributes = ele.getAttributes();
 		for (int i = 0; i < attributes.getLength(); i++) {
 			Node node = attributes.item(i);
+			// 遍历看看是否有合适于修饰用过的属性
 			finalDefinition = decorateIfRequired(node, finalDefinition, containingBd);
 		}
 
@@ -1436,6 +1437,7 @@ public class BeanDefinitionParserDelegate {
 		for (int i = 0; i < children.getLength(); i++) {
 			Node node = children.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				// 遍历子节点看看是否有修饰过的属性
 				finalDefinition = decorateIfRequired(node, finalDefinition, containingBd);
 			}
 		}
@@ -1453,8 +1455,11 @@ public class BeanDefinitionParserDelegate {
 	public BeanDefinitionHolder decorateIfRequired(
 			Node node, BeanDefinitionHolder originalDef, @Nullable BeanDefinition containingBd) {
 
+		// 自定义标签命名空间
 		String namespaceUri = getNamespaceURI(node);
+		// 对于非默认标签进行修饰
 		if (namespaceUri != null && !isDefaultNamespace(namespaceUri)) {
+			// 空间内找到对应的处理器
 			NamespaceHandler handler = this.readerContext.getNamespaceHandlerResolver().resolve(namespaceUri);
 			if (handler != null) {
 				BeanDefinitionHolder decorated =
