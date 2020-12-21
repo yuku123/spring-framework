@@ -53,6 +53,7 @@ import org.springframework.util.Assert;
  */
 public class AnnotationConfigApplicationContext extends GenericApplicationContext implements AnnotationConfigRegistry {
 
+	// 一个读取注解的bean定义读取器
 	private final AnnotatedBeanDefinitionReader reader;
 
 	private final ClassPathBeanDefinitionScanner scanner;
@@ -134,6 +135,8 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * <p>The default is an {@link AnnotationScopeMetadataResolver}.
 	 * <p>Any call to this method must occur prior to calls to {@link #register(Class...)}
 	 * and/or {@link #scan(String...)}.
+	 *
+	 * 设置作用范围元信息解析器
 	 */
 	public void setScopeMetadataResolver(ScopeMetadataResolver scopeMetadataResolver) {
 		this.reader.setScopeMetadataResolver(scopeMetadataResolver);
