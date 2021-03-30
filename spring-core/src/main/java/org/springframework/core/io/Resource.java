@@ -51,6 +51,8 @@ import org.springframework.lang.Nullable;
  */
 
 // @zifang Spring 框架所有资源的抽象和访问接口
+// Resource - 资源定义
+// ResourceLoader - 资源的解析
 public interface Resource extends InputStreamSource {
 
 	/**
